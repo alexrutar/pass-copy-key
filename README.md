@@ -1,17 +1,19 @@
 # Pass Show Key
 ## Introduction
 This script is a command line wrapper around the password manager [pass](https://www.passwordstore.org) to help copy values to the clipboard.
-Install with
+If you like [fisher](https://github.com/jorgebucaran/fisher), you can
 ```
-fisher install alexrutar/pass-copy-key
+fisher install alexrutar/psk
 ```
+Otherwise, just copy the files [functions/psk.fish](functions/psk.fish) and [completions/psk.fish](completions/psk.fish) to their relevant directories.
+
 Pass-copy-key assumes your pass files are in the following format:
 ```
 <password>
 <key>: <value>
 ...
 ```
-Any value for `<key>` or `<value>` is allowed, as long as it does not contain a `: `.
+Any value for `<key>` or `<value>` is allowed, and in the case of multiple occurrences of `: `, the separation happens at the latest one.
 The main command is
 ```
 psk login <passfile>
@@ -29,4 +31,4 @@ lists all recognized keys.
 
 ## Dependencies
 You should install [pass](https://www.passwordstore.org) and have it set up appropriately.
-You also need the tool [fd](https://github.com/sharkdp/fd) accessible on your `PATH`.
+You also need the tool [fd](https://github.com/sharkdp/fd) installed and accessible on your `PATH`.
