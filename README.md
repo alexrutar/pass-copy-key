@@ -1,4 +1,4 @@
-# V Session Manager
+# Pass Copy Key
 ## Introduction
 This script is a command line wrapper around the password manager [pass](https://www.passwordstore.org) to help copy values to the clipboard.
 Install with
