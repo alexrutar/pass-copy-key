@@ -1,6 +1,6 @@
-function psc --argument command passfile key
-    set -l psc_version 0.1
-    function __psc_get_match --argument regex --inherit-variable passfile
+function psk --argument command passfile key
+    set -l psk_version 0.1
+    function __psk_get_match --argument regex --inherit-variable passfile
         set -l username (pass show $passfile | tail -n +2 | string match -r $regex | head -n 2 | tail -n 1)
         if test -n "$username"
             echo -n "$username" | pbcopy
@@ -12,18 +12,18 @@ function psc --argument command passfile key
 
     switch $command
         case -v --version
-            echo "psc, version $psc_version"
+            echo "psk, version $psk_version"
 
         case '' -h --help
-            echo 'Usage: psc login PASSFILE          Copy login and pass to the clipboard'
-            echo '       psc show-key PASSFILE KEY   Copy value of the key to the clipboard'
-            echo '       psc list-keys PASSFILE      List valid keys'
+            echo 'Usage: psk login PASSFILE          Copy login and pass to the clipboard'
+            echo '       psk show-key PASSFILE KEY   Copy value of the key to the clipboard'
+            echo '       psk list-keys PASSFILE      List valid keys'
             echo 'Options:'
             echo '       -v | --version              Print version'
             echo '       -h | --help                 Print this help message'
 
         case login
-            if __psc_get_match ".+:\ (.+)"
+            if __psk_get_match ".+:\ (.+)"
                 echo "Copied $passfile login to clipboard."
                 read -p 'echo "Press ENTER to continue "'
             else
@@ -33,7 +33,7 @@ function psc --argument command passfile key
 
         case show-key
             if test -n "$key"
-                if __psc_get_match "$key:\ (.+)"
+                if __psk_get_match "$key:\ (.+)"
                     echo "Copied $passfile key '$key' to clipboard"
                 else
                     echo "Key '$key' not found in passfile!" >&2
@@ -48,7 +48,7 @@ function psc --argument command passfile key
             pass show $passfile | tail -n +2 | string match -r "(.+):\ .+" | sed -n 'n;p'
 
         case *
-            echo "psc: Unknown command: \"$command\"" >&2
+            echo "psk: Unknown command: \"$command\"" >&2
             return 1
     end
 end

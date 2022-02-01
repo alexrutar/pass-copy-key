@@ -1,6 +1,6 @@
-set -l psc_subcommands login show-key list-keys
-complete --command psc --exclusive --long help --description "Print help"
-complete --command psc --exclusive --long version --description "Print version"
+set -l psk_subcommands login show-key list-keys
+complete --command psk --exclusive --long help --description "Print help"
+complete --command psk --exclusive --long version --description "Print version"
 
 # pass completions from
 #  https://git.zx2c4.com/password-store/tree/src/completion/pass.fish-completion
@@ -19,17 +19,17 @@ function __fish_pass_print_entries
     printf '%s\n' $matches | sed "s#$prefix/\(.*\)$ext#\1#"
 end
 
-complete --command psc --exclusive --argument login \
+complete --command psk --exclusive --argument login \
     -n __fish_use_subcommand \
     --description 'Copy login and pass to the clipboard'
 
-complete --command psc --exclusive --argument show-key \
+complete --command psk --exclusive --argument show-key \
     -n __fish_use_subcommand \
     --description 'Copy value of key to the clipboard'
 
-complete --command psc --exclusive --argument list-keys \
+complete --command psk --exclusive --argument list-keys \
     -n __fish_use_subcommand \
     --description 'List valid keys'
 
-complete --command psc --exclusive --argument "(__fish_pass_print_entries)" \
-    -n "__fish_seen_subcommand_from $psc_subcommands"
+complete --command psk --exclusive --argument "(__fish_pass_print_entries)" \
+    -n "__fish_seen_subcommand_from $psk_subcommands"

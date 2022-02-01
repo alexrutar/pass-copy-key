@@ -14,16 +14,16 @@ Pass-copy-key assumes your pass files are in the following format:
 Any value for `<key>` or `<value>` is allowed, as long as it does not contain a `: `.
 The main command is
 ```
-psc login <passfile>
+psk login <passfile>
 ```
 This copies the first valid `<value>` in `<passfile>` to your clipboard, and prompts you to continue.
 Once you continue, it copies the password to your clipboard.
 ```
-psc copy-key <passfile> <key>
+psk copy-key <passfile> <key>
 ```
 copes the value corresponding to `<key>` in `<passfile>` to the clipboard.
 ```
-psc list-keys <passfile>
+psk list-keys <passfile>
 ```
 lists all recognized keys.
 
