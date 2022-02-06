@@ -12,7 +12,7 @@ function psk --argument command passfile key
     function __psk_copy_login --argument passfile
         for username in $argv[2..]
             if __psk_copy_value $username $passfile
-                echo "Copied $passfile username to clipboard."
+                echo "Copied $passfile login to clipboard."
                 read -p 'echo "Press ENTER to continue "'
                 return 0
             end
