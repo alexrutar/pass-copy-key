@@ -12,8 +12,9 @@ Pass-copy-key assumes your pass files are in the following format:
 <password>
 <key>: <value>
 ...
+...
 ```
-Any value for `<key>` or `<value>` is allowed, and in the case of multiple occurrences of `: `, the separation happens at the latest one.
+In fact, any valid [YAML](https://yaml.org/spec/1.2.2/) is allowed.
 The main command is
 ```
 psk login <passfile>
@@ -31,4 +32,13 @@ lists all recognized keys.
 
 ## Dependencies
 You should install [pass](https://www.passwordstore.org) and have it set up appropriately.
-You also need the tool [fd](https://github.com/sharkdp/fd) installed and accessible on your `PATH`.
+You also need the tool [yq](https://github.com/mikefarah/yq) installed and accessible on your `PATH`.
+
+## Configuration
+Specify the login keys with `PSK_LOGIN_KEYS`.
+The keys are tried in order of specification.
+For example, if you want to login with the `username` key, and fall back to the `email` key if `username` is not specified,
+```
+set -x PSK_LOGIN_KEYS username email
+```
+This value defaults to `username`.
