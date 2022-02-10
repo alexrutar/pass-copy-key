@@ -1,11 +1,27 @@
 function psk --argument command passfile key
-    set -l psk_version 0.2
-    function __psk_copy_value --argument key passfile
+    set --local psk_version 0.2
+
+    # set the copy command depending on the platform
+    set --local copy_cmd
+    if test -n $WAYLAND_DISPLAY
+        and command -v wl-copy &> /dev/null
+        set copy_cmd wl-copy
+    else if test -n $DISPLAY
+        and command -v xclip &> /dev/null
+        set copy_cmd xclip -selection "$X_SELECTION"
+    else if command -v pbcopy &> /dev/null
+        set copy_cmd pbcopy
+    else
+        echo "Could not find valid clipboard program!" >&2
+        return 1
+    end
+
+    function __psk_copy_value --inherit-variable copy_cmd --argument key passfile
         set --local value (pass show $passfile | tail -n +2 | yq ".[\"$key\"]")
         if test $value = "null"
             return 1
         else
-            echo -n $value | pbcopy
+            echo -n $value | $copy_cmd
         end
     end
 
@@ -61,7 +77,7 @@ function psk --argument command passfile key
             # TODO: improve error message when yq fails with malformed input
             pass show $passfile | tail -n +2 | yq '. | keys' | cut -c 3- 
 
-        case *
+        case '*'
             echo "psk: Unknown command: \"$command\"" >&2
             return 1
     end

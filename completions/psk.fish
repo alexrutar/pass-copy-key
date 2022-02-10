@@ -1,4 +1,4 @@
-set -l psk_subcommands login show-key list-keys
+set -l psk_subcommands login copy-key list-keys
 complete --command psk --exclusive --long help --description "Print help"
 complete --command psk --exclusive --long version --description "Print version"
 
@@ -23,7 +23,7 @@ complete --command psk --exclusive --argument login \
     -n __fish_use_subcommand \
     --description 'Copy login and pass to the clipboard'
 
-complete --command psk --exclusive --argument show-key \
+complete --command psk --exclusive --argument copy-key \
     -n __fish_use_subcommand \
     --description 'Copy value of key to the clipboard'
 
