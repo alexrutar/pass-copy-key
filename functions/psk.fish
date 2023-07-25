@@ -54,15 +54,15 @@ function psk --argument command passfile key
 
         case '' -h --help
             echo 'Usage: psk login PASSFILE          Copy username and pass to the clipboard'
-            echo '       psk copy-key PASSFILE KEY   Copy value of the key to the clipboard'
-            echo '       psk show-key PASSFILE KEY   Print value of the key'
-            echo '       psk list-keys PASSFILE      List valid keys'
+            echo '       psk copy PASSFILE KEY   Copy value of the key to the clipboard'
+            echo '       psk show PASSFILE KEY   Print value of the key'
+            echo '       psk list PASSFILE      List valid keys'
             echo 'Options:'
             echo '       -v | --version              Print version'
             echo '       -h | --help                 Print this help message'
             echo 'Variables:'
             echo '       PSK_LOGIN_KEYS              Array of valid keys for passfile username'
-            echo '                                    Default: username'
+            echo '                                    Default: \'username\''
 
         case login
             if not __psk_copy_login $passfile $PSK_LOGIN_KEYS
@@ -70,7 +70,7 @@ function psk --argument command passfile key
             end
             pass show -c $passfile
 
-        case copy-key
+        case copy
             if test -n "$key"
                 if __psk_copy_value $key $passfile
                     echo "Copied $passfile key '$key' to clipboard"
@@ -83,7 +83,7 @@ function psk --argument command passfile key
                 return 1
             end
  
-        case show-key
+        case show
             if test -n "$key"
                 if __psk_show_value $key $passfile
                     return 0
@@ -96,7 +96,7 @@ function psk --argument command passfile key
                 return 1
             end
 
-        case list-keys
+        case list
             # TODO: improve error message when yq fails with malformed input
             pass show $passfile | tail -n +2 | yq '. | keys' | cut -c 3- 
 
