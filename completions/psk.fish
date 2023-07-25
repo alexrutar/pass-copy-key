@@ -1,4 +1,4 @@
-set -l psk_subcommands login copy-key list-keys
+set -l psk_subcommands login copy-key show-key list-keys
 complete --command psk --exclusive --long help --description "Print help"
 complete --command psk --exclusive --long version --description "Print version"
 

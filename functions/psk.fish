@@ -1,5 +1,5 @@
 function psk --argument command passfile key
-    set --local psk_version 0.2
+    set --local psk_version 0.3
 
     # set the copy command depending on the platform
     set --local copy_cmd
@@ -25,6 +25,15 @@ function psk --argument command passfile key
         end
     end
 
+    function __psk_show_value --argument key passfile
+        set --local value (pass show $passfile | tail -n +2 | yq ".[\"$key\"]")
+        if test $value = "null"
+            return 1
+        else
+            echo $value
+        end
+    end
+
     function __psk_copy_login --argument passfile
         for username in $argv[2..]
             if __psk_copy_value $username $passfile
@@ -46,6 +55,7 @@ function psk --argument command passfile key
         case '' -h --help
             echo 'Usage: psk login PASSFILE          Copy username and pass to the clipboard'
             echo '       psk copy-key PASSFILE KEY   Copy value of the key to the clipboard'
+            echo '       psk show-key PASSFILE KEY   Print value of the key'
             echo '       psk list-keys PASSFILE      List valid keys'
             echo 'Options:'
             echo '       -v | --version              Print version'
@@ -64,6 +74,19 @@ function psk --argument command passfile key
             if test -n "$key"
                 if __psk_copy_value $key $passfile
                     echo "Copied $passfile key '$key' to clipboard"
+                else
+                    echo "Key '$key' not found in passfile!" >&2
+                    return 1
+                end
+            else
+                echo "Missing required argument: KEY" >&2
+                return 1
+            end
+ 
+        case show-key
+            if test -n "$key"
+                if __psk_show_value $key $passfile
+                    return 0
                 else
                     echo "Key '$key' not found in passfile!" >&2
                     return 1
