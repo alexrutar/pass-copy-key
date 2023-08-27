@@ -1,5 +1,17 @@
-function psk --argument command passfile key
-    set --local psk_version 0.3
+function __psk_echo_help
+    echo 'Usage: psk login PASSFILE      Copy username and pass to the clipboard'
+    echo '       psk copy PASSFILE KEY   Copy value of the key to the clipboard'
+    echo '       psk show PASSFILE KEY   Print value of the key'
+    echo '       psk list PASSFILE       List valid keys'
+    echo 'Options:'
+    echo '       -h/--help               Print this help message'
+    echo '       -V/--version            Print version'
+    echo 'Variables:'
+    echo '       PSK_LOGIN_KEYS          Array of valid keys for passfile username'
+    echo '                                Default: \'username\''
+end
+function psk
+    set --local psk_version 0.4
 
     # set the copy command depending on the platform
     set --local copy_cmd
@@ -48,22 +60,41 @@ function psk --argument command passfile key
     set --query PSK_LOGIN_KEYS
     or set --local PSK_LOGIN_KEYS username
 
+    set --local options (fish_opt --short=V --long=version)
+    set --local options $options (fish_opt --short=h --long=help)
+
+    if not argparse $options -- $argv
+        __psk_echo_help >&2
+        return 1
+    end
+
+    set --local command $argv[1]
+    set --local passfile $argv[2]
+    set --local key $argv[3]
+
+    if set --query _flag_help
+        __psk_echo_help
+        return 0
+    end
+
+    if set --query _flag_version
+        echo "psk (version $psk_version)"
+        return 0
+    end
+
+
+    if test -z "$command"
+        echo "psk: missing subcommand" >&2
+        __psk_echo_help >&2
+        return 1
+    end
+
+    if test -z "$passfile"
+        echo "psk: missing argument PASSFILE" >&2
+        return 1
+    end
+
     switch $command
-        case -v --version
-            echo "psk, version $psk_version"
-
-        case '' -h --help
-            echo 'Usage: psk login PASSFILE          Copy username and pass to the clipboard'
-            echo '       psk copy PASSFILE KEY   Copy value of the key to the clipboard'
-            echo '       psk show PASSFILE KEY   Print value of the key'
-            echo '       psk list PASSFILE      List valid keys'
-            echo 'Options:'
-            echo '       -v | --version              Print version'
-            echo '       -h | --help                 Print this help message'
-            echo 'Variables:'
-            echo '       PSK_LOGIN_KEYS              Array of valid keys for passfile username'
-            echo '                                    Default: \'username\''
-
         case login
             if not __psk_copy_login $passfile $PSK_LOGIN_KEYS
                 echo "$passfile has no login key"
@@ -101,7 +132,7 @@ function psk --argument command passfile key
             pass show $passfile | tail -n +2 | yq '. | keys' | cut -c 3- 
 
         case '*'
-            echo "psk: Unknown command: \"$command\"" >&2
+            echo "psk: Unknown subcommand '$command'" >&2
             return 1
     end
 end
