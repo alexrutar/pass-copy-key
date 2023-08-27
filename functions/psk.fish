@@ -10,6 +10,8 @@ function __psk_echo_help
     echo '       PSK_LOGIN_KEYS          Array of valid keys for passfile username'
     echo '                                Default: \'username\''
 end
+
+
 function psk
     set --local psk_version 0.4
 
@@ -110,7 +112,7 @@ function psk
                     return 1
                 end
             else
-                echo "Missing required argument: KEY" >&2
+                echo "psk: missing argument KEY" >&2
                 return 1
             end
  
@@ -123,7 +125,7 @@ function psk
                     return 1
                 end
             else
-                echo "Missing required argument: KEY" >&2
+                echo "psk: missing argument KEY" >&2
                 return 1
             end
 
