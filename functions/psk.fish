@@ -5,7 +5,7 @@ function __psk_echo_help
     echo '       psk list PASSFILE       List valid keys'
     echo 'Options:'
     echo '       -h/--help               Print this help message'
-    echo '       -V/--version            Print version'
+    echo '       -v/--version            Print version'
     echo 'Variables:'
     echo '       PSK_LOGIN_KEYS          Array of valid keys for passfile username'
     echo '                                Default: \'username\''
@@ -62,7 +62,7 @@ function psk
     set --query PSK_LOGIN_KEYS
     or set --local PSK_LOGIN_KEYS username
 
-    set --local options (fish_opt --short=V --long=version)
+    set --local options (fish_opt --short=v --long=version)
     set --local options $options (fish_opt --short=h --long=help)
 
     if not argparse $options -- $argv
